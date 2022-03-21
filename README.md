@@ -8,7 +8,8 @@ Code and script for Ultrasound Cancer tumor detection using Faster R-CNN with a 
 
 Data:
 1. BUSI ultrasound images for first fine-tuning (~700 images)
-2. UCLA Ultrasound set for final classification & Region detection (~8800 images)
+    https://scholar.cu.edu.eg/?q=afahmy/pages/dataset
+3. UCLA Ultrasound set for final classification & Region detection (~8800 images)
 
 
 Environment:
@@ -36,3 +37,16 @@ Code Flow:
 ***
 Currently being retrained/retested without ImageNet normalization
 ***
+
+***
+NOTES:
+1. The Ultrasound system (Phillips) burns the workspace information onto the images (or the US image is embedded into the workspace and saved). Cropping removes the breast map, but some of the scale markers (right side slider-type) and orientation text may remain in the final image.
+2. BUSI training can complete within a normal Google Colab sequence (8-12 hours). Fine-tuning with the larger UCLA dataset requires saving checkpoints and restarting. The initial restarts have loss that bounces at the start each time, but quickly get back to the loss/IOU of the previous checkpoint (might still be some tweaks/fixes to be made to loading from checkpoints).
+3. GradCam on Colab has some issues with the version Colab seems to support (or I'm not using it correctly). Attaching hooks and manually getting heatmaps is in there as debug code,but a prepared library would be better (many of them didn't work out of the box with Faster-RCNN architectures).
+4. Final model is saved based upon IOU criteria instead of classification validation criteria (best IOU gets saved off). Checking validation against class metrics might produce increased classifier results.
+5. US images that are mostly black or very low intensity may throw off the simple cropping (looks for distinct window edge thresholds to differentiate ultrasound embedded image and GUI stuff.
+***
+
+References:
+1. Al-Dhabyani W, Gomaa M, Khaled H, Fahmy A. Dataset of breast ultrasound images. Data in Brief. 2020 Feb;28:104863. DOI: 10.1016/j.dib.2019.104863.
+2. 
