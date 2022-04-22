@@ -1,4 +1,5 @@
-# UCLA_BIOENG_596_FALL_21 & Winter 2022
+# UCLA_BIOENG_596_FALL_21/Winter 2022/Spring2022
+# Ultrasound Breast Cancer Detection
 Keane Gonzalez
 
 Code and script for Ultrasound Cancer tumor detection using Faster R-CNN with a ResNet50 pre-trained backbone
