@@ -40,6 +40,51 @@ Currently being retrained/retested without ImageNet normalization
 ***
 
 ***
+Steps for usage
+1. The main options page starts at the first cell. It will import needed libraries for colab and the data directories can be changed here. The code options for choosing training or testing are set here too.
+
+
+This is the main set of options in cell 1. There are two main modes: training and testing. Set run_testing_only to 1 to load the necessary functions and stop right before the training starts. This allows the user to run the code segment that loads particular saved models for testing. Setting run_testing_only to 0 will cause the code to go through the RESNET training sequence
+
+                        ################################################################################
+                        #                    MODEL SPECIFIC OPTIONS
+                        #
+                        # Choose training sets to use
+                        training_set = 0 #0=UCLA US, 1 = UCLA + BUSI, 2 = BUSI
+
+                        #choose the normalization path to use
+                        #0 is the 0 to 1 Normalization based upon the ultrasound data
+                        #1 is the 0 to 1 Normalization based upon the ImageNet data
+                        #
+                        #
+                        model_branch = 1 #0=0to1, 1 = -2to2
+                        transfer_train = 0 #we will load the model states from a checkpoint epoch instead
+
+                        #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                        #               TURN TRAINING ON OR OFF
+                        # Choose to do training or to load models for use in testing only
+                        # run_testing_only = 0 is for training, =1 for a stop after loading models. 1 is
+                        # used for running a model on the Test dataset
+                        run_testing_only = 1
+
+
+                        # Set use_last_epoch to 1 to start from a pre-trained checkpoint. Setting to 0
+                        #starts training from the beginning
+                        use_last_epoch = 1 #
+                        ################################################################################
+
+
+
+2. IN WORK
+
+
+
+
+
+
+***
+
+***
 NOTES:
 1. The Ultrasound system (Phillips) burns the workspace information onto the images (or the US image is embedded into the workspace and saved). Cropping removes the breast map, but some of the scale markers (right side slider-type) and orientation text may remain in the final image.
 2. BUSI training can complete within a normal Google Colab sequence (8-12 hours). Fine-tuning with the larger UCLA dataset requires saving checkpoints and restarting. The initial restarts have loss that bounces at the start each time, but quickly get back to the loss/IOU of the previous checkpoint (might still be some tweaks/fixes to be made to loading from checkpoints).
