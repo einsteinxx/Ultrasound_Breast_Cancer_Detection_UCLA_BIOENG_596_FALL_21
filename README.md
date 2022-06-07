@@ -74,8 +74,78 @@ This is the main set of options in cell 1. There are two main modes: training an
                         ################################################################################
 
 
+2. TBD
 
-2. IN WORK
+
+3. TESTING
+Once the Training has completed or if staring from a pre-generated model, set run_testin_only to 1. This will kick you out of the main training cell and allow you to load the model separately from all the previous data.  The function tab below is where the user can choose which model to load:
+                #Load Saved model dictionary for testing
+
+
+These are the most important sections needed to load in the model. Data selected for testing is very important as it must have been regenerated with this model or saved previously.
+
+The checkpoint method is reused to load the model, with state dict being necessary when saved. Epoch is not necessary, but was automatically included from the training saves. For the UCLA runs, the same training/validation/test data was reused throughout the whole training sequences to reduce any chance of data being mixed between them. For normal runs, data info was saved along with any other info needed for testing.
+
+
+                checkpoint = torch.load(model_dict)
+                modelr.load_state_dict(checkpoint['model_state_dict'])
+                #optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
+                start_epoch = checkpoint['epoch']
+
+
+
+                #
+                # Load relevant saved train/validation/test file sets
+                #
+                print('Loading previous set of train/val/test files')
+                #subdir = '0TO1_UCLA_BEST'
+                last_data_list = os.path.join(model_dir, subdir,'last_data_set.pickle') #0TO1
+                #'/content/gdrive/My Drive/BreastUS/MODEL_SAVE/UCLA_FINAL/last_data_set.pickle'
+
+                archived_data = pickle.load( open( last_data_list, "rb" ) )
+                training_data = archived_data[0][0]
+                validation_data = archived_data[0][1]
+                test_data =archived_data[0][2]
+                bounding_box = archived_data[0][3]
+                first50 =archived_data[0][4]
+
+
+
+4. Test the model with available data
+
+To test out the model, jump to the section below:
+                        #FUNCTION: TEST UCLA FINAL MODELS
+This function will take in a cutoff and data for the model. The cell below, Run UCLA METRICS, will call this function for cutoffs from 0 - 90% confidence scores. 
+
+
+
+
+                for loop in range(0,10,1):
+                    score_cutoff =  float(loop/10) #to get floating point step sizes
+                    test_metrics = test_ucla_classification(modelr,input_dataset=test_data, 
+                                                            batch_size=batch_size, 
+                                                            score_cutoff=score_cutoff, 
+                                                            iou_cutoff = iou_cutoff)
+                    saved_metrics[loop] = test_metrics
+
+
+The output will be saved for use in plotting in the next cell. All of the useful metrics (TP/FP/TN/FN, etc...) will be saved for each confidence cutoff
+
+
+
+5. Plot Metrics
+
+A generic set of plots produced by this cell, taken from the confidence score calculations saved as pickle files:
+
+![image](https://user-images.githubusercontent.com/27804848/172364215-4198c7e7-47fe-4647-84d2-b61361540c7c.png)
+
+
+![image](https://user-images.githubusercontent.com/27804848/172364272-74a26b65-d0db-46cd-958c-2a7d2d935a49.png)
+
+
+![image](https://user-images.githubusercontent.com/27804848/172364345-aa1f2887-a9fe-43ba-9ce1-ba5f84820b78.png)
+
+![image](https://user-images.githubusercontent.com/27804848/172364395-8eff24eb-659d-4a1c-9faa-b211751683ee.png)
 
 
 
